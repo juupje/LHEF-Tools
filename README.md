@@ -1,2 +1,12 @@
 # LHEF-Tools
 Python scripts for reading, parsing and analysing Les Houches Event Files.
+
+Summary of the (relevant part of the) thesis for which this code was written:
+import_lhe parses LHE files and stores the data into an object oriented way via three classes: Data, Event and Particle.
+The class `Data` stores a list of `Event`s. Each `Event` stores a list of `Particle`s. Both provide methods to extract all particles with a certain ID as defined by the PDG particle numbering scheme. `Event` objects provide an additional method which returns all final state particles. The `Particle` class contains several variables in which observables such as momentum, energy, mass and spin are stored, as well as its PDG ID and status (initial/intermediate/final particle). All three objects can be converted into NumPy objects, to allow for a more memory efficient storage. The source code can be found in ref.
+
+A second script provides several functionalities such as calculating the invariant mass of a set of particles, the grouping of four jets into pairs of two according to their invariant mass, plotting histograms and creating a set of cuts. The function `make_cuts(x, x_min, x_max)}` counts the amount of elements in the array `x` which have a value `x_min}<=x<=x_max`, or alternatively (if an additional argument `logical=True` is provided) a boolean array of the same size of `x` whose i-th element is `True` if the same condition is satisfied. Using NumPy's broadcasting features, a single function call can process multiple cuts if `x_min` and/or `x_max` are arrays of cuts.
+
+Finally, a class `Cuts` is provided to store these boolean arrays more efficiently. Each boolean requires only a single bit to be stored, but is actually stored in a byte as only full bytes can be stored in a computer's memory. This effectively increases the memory required by a factor of 8, which leads to a considerable memory usage. Instead, the `Cuts` class uses bitshifts and bitwise operations to store up to 8 cuts in an array of 8-bit integers which has the same memory footprint as an array of booleans with the same length. Up to 16 cuts can be stored in an array of 16-bit integers, etc. up to 64 cuts.
+
+Using the `Cuts` class slightly increases CPU time as a compromise to using only one-eighth of the memory. This increase in processing time can, however, largely be ignored due to the size of the overhead from the Python interpreter compared to the array operations done using NumPy's highly optimized functionalities.
