@@ -255,7 +255,7 @@ class Cuts:
     def __getitem__(self, key):
         key = self.__check_indices(key)          
         arr = (self._selections & (1<<key)) >> key
-        #arr.astype(np.bool_, copy=False)
+        arr=arr.astype(np.bool_, copy=False)
         return arr
     
     def __check_indices(self, idx):
